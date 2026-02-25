@@ -56,7 +56,7 @@ const STARS_ARR = [0, 1, 2, 3, 4];
 
 function AvatarGroup() {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex flex-col sm:flex-row items-center sm:items-center gap-3 sm:gap-4">
       <div className="flex -space-x-2">
         {AVATAR_URLS.map((src) => (
           <Image
@@ -69,8 +69,8 @@ function AvatarGroup() {
           />
         ))}
       </div>
-      <div>
-        <div className="flex gap-0.5 mb-0.5 items-center">
+      <div className="text-center sm:text-left">
+        <div className="flex gap-0.5 mb-0.5 items-center justify-center sm:justify-start">
           {STARS_ARR.map((s) => (
             <Star key={s} size={10} className="fill-blue-500 text-blue-500" />
           ))}
@@ -78,9 +78,9 @@ function AvatarGroup() {
             4.9 / 5
           </span>
         </div>
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-gray-100">
           Trusted by{" "}
-          <span className="font-bold text-gray-700">300+ clients</span>
+          <span className="font-bold text-gray-200">500+ companies</span>
         </p>
       </div>
     </div>
@@ -196,17 +196,19 @@ export default function Home() {
       >
         {/* ── TOP NAV ── */}
         <nav
-          className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-5 transition-colors duration-300 ${
+          className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-8 py-4 sm:py-5 transition-colors duration-300 ${
             navDark ? "text-gray-900" : "text-white"
           }`}
         >
-          <div className="flex items-center gap-2">
-            <AylixLogo className="w-8 h-auto" />
-            <span className="font-bold text-lg tracking-tight">nauzyxlabs</span>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <AylixLogo className="w-6 sm:w-8 h-auto" />
+            <span className="font-bold text-base sm:text-lg tracking-tight">
+              nauzyxlabs
+            </span>
           </div>
 
           <button
-            className={`border text-sm font-semibold px-5 py-2 rounded-full transition-all ${
+            className={`border text-xs sm:text-sm font-semibold px-3 sm:px-5 py-1.5 sm:py-2 rounded-full transition-all ${
               navDark
                 ? "border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white"
                 : "border-white text-white hover:bg-white/10"
@@ -218,7 +220,7 @@ export default function Home() {
 
         <section
           ref={heroRef}
-          className="relative min-h-screen flex flex-col justify-end pb-16 px-10 overflow-hidden"
+          className="relative min-h-screen flex flex-col justify-end pb-12 sm:pb-16 px-4 sm:px-6 md:px-10 overflow-hidden"
         >
           {/* Grainient WebGL background */}
           <div className="absolute inset-0 z-0">
@@ -245,38 +247,39 @@ export default function Home() {
             />
           </div>
 
-          <p className="hero-item text-white/80 text-xs font-bold tracking-[0.25em] uppercase mb-3 relative z-10">
-            NAUZYXLABS
+          <p className="hero-item text-white/70 text-xs font-bold tracking-[0.25em] uppercase mb-4 relative z-10">
+            Digital Solutions for Modern Business
           </p>
-          <h1 className="hero-item relative z-10 text-white font-sans text-5xl md:text-6xl lg:text-7xl leading-[1.05] max-w-XL mb-0">
-            Helping you
+          <h1 className="hero-item relative z-10 text-white font-sans text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] max-w-4xl mb-0">
+            Transform Your
             <br />
-            implement AI in
+            Business with
             <br />
-            your business
+            Smart Solutions
           </h1>
           {/* Right side description + CTAs */}
-          <div className="hero-item absolute right-10 bottom-16 max-w-xs text-right z-10">
-            <p className="text-white/90 text-sm leading-relaxed mb-5">
-              <strong>Your on-demand AI workforce.</strong> Automate routine
-              tasks, streamline decision-making, and free your team to focus on
-              what matters most.
+          <div className="hero-item absolute right-4 sm:right-6 md:right-10 bottom-16 md:bottom-20 max-w-xs md:max-w-sm text-right z-10">
+            <p className="text-white/80 text-xs sm:text-sm leading-relaxed mb-5">
+              <strong>Empower your team.</strong> Drive efficiency, accelerate
+              growth, and stay ahead with cutting-edge digital solutions
+              designed for modern enterprises.
             </p>
-            <div className="flex gap-3 justify-end">
-              <button className="border border-white/60 text-white text-sm font-medium px-5 py-2.5 rounded-full hover:bg-white/10 transition-all">
-                Case studies
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-end">
+              <button className="border border-white/60 text-white text-xs sm:text-sm font-medium px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-white/10 transition-all">
+                Learn more
               </button>
-              <button className="bg-blue-500/80 text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-blue-400 transition-all backdrop-blur-sm">
-                Get in touch
+              <button className="bg-blue-500/80 text-white text-xs sm:text-sm font-semibold px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-blue-400 transition-all backdrop-blur-sm">
+                Get started
               </button>
             </div>
           </div>
-          <div className="hero-item relative z-10 mt-12">
+          <div className="hero-item relative z-10 mt-8 sm:mt-12 px-4 sm:px-0">
             <AvatarGroup />
           </div>
-          <div className="hero-item absolute bottom-6 right-10 flex items-center gap-2 text-white/60 text-xs z-10">
+          <div className="hero-item absolute bottom-4 sm:bottom-6 right-4 sm:right-10 flex items-center gap-2 text-white/60 text-xs z-10">
             <Mouse size={14} />
-            Scroll to explore
+            <span className="hidden sm:inline">Scroll to explore</span>
+            <span className="sm:hidden">Explore</span>
           </div>
         </section>
       </div>

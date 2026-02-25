@@ -16,19 +16,22 @@ export default function Cursor() {
 
     if (!cursor || !follower) return;
 
-    // Center the cursor
+    // Hide default cursor
+    document.documentElement.style.cursor = "none";
+
+    // Smooth, fluid cursor movement
     const moveCursor = (e: MouseEvent) => {
       gsap.to(cursor, {
         x: e.clientX,
         y: e.clientY,
-        duration: 0.05,
-        ease: "power2.out",
+        duration: 0.03,
+        ease: "linear",
       });
       gsap.to(follower, {
         x: e.clientX,
         y: e.clientY,
-        duration: 0.15,
-        ease: "power2.out",
+        duration: 0.2,
+        ease: "sine.out",
       });
     };
 
@@ -36,22 +39,22 @@ export default function Cursor() {
 
     // Hover effects
     const handleMouseEnter = () => {
-      gsap.to(cursor, { scale: 0.5, opacity: 0, duration: 0.2 });
+      gsap.to(cursor, { scale: 0.8, opacity: 0.6, duration: 0.15 });
       gsap.to(follower, {
-        scale: 2.5,
-        backgroundColor: "#fff",
-        mixBlendMode: "difference",
-        duration: 0.3,
+        scale: 1.8,
+        backgroundColor: "rgba(255, 255, 255, 0.15)",
+        mixBlendMode: "screen",
+        duration: 0.25,
       });
     };
 
     const handleMouseLeave = () => {
-      gsap.to(cursor, { scale: 1, opacity: 1, duration: 0.2 });
+      gsap.to(cursor, { scale: 1, opacity: 1, duration: 0.15 });
       gsap.to(follower, {
         scale: 1,
         backgroundColor: "transparent",
         mixBlendMode: "difference",
-        duration: 0.3,
+        duration: 0.25,
       });
     };
 
@@ -84,6 +87,7 @@ export default function Cursor() {
     return () => {
       window.removeEventListener("mousemove", moveCursor);
       observer.disconnect();
+      document.documentElement.style.cursor = "auto";
       interactiveElements.forEach((el) => {
         el.removeEventListener("mouseenter", handleMouseEnter);
         el.removeEventListener("mouseleave", handleMouseLeave);
@@ -95,11 +99,11 @@ export default function Cursor() {
     <>
       <div
         ref={cursorRef}
-        className="fixed top-0 left-0 w-2 h-2 bg-white rounded-full pointer-events-none z-[9999] mix-blend-difference -translate-x-1/2 -translate-y-1/2 hidden md:block"
+        className="fixed top-0 left-0 w-1.5 h-1.5 bg-white rounded-full pointer-events-none z-[9999] mix-blend-difference -translate-x-1/2 -translate-y-1/2 hidden md:block will-change-transform"
       />
       <div
         ref={followerRef}
-        className="fixed top-0 left-0 w-10 h-10 border border-white rounded-full pointer-events-none z-[9998] mix-blend-difference -translate-x-1/2 -translate-y-1/2 hidden md:block"
+        className="fixed top-0 left-0 w-8 h-8 border-2 border-white rounded-full pointer-events-none z-[9998] mix-blend-difference -translate-x-1/2 -translate-y-1/2 hidden md:block will-change-transform"
       />
     </>
   );
