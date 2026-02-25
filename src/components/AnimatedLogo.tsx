@@ -20,7 +20,12 @@ export default function AnimatedLogo({
     const els = containerRef.current.querySelectorAll("path, circle");
 
     gsap.set(containerRef.current, { opacity: 1 });
-    gsap.set(els, { opacity: 0, y: 20, scale: 0.9, transformOrigin: "center center" });
+    gsap.set(els, {
+      opacity: 0,
+      y: 0,
+      scale: 0,
+      transformOrigin: "center center",
+    });
 
     gsap.to(els, {
       opacity: 1,
@@ -28,36 +33,54 @@ export default function AnimatedLogo({
       scale: 1,
       duration: 0.8,
       stagger: 0.08,
-      ease: "power3.out",
+      ease: "power3.inOut",
       onComplete: onAnimationComplete,
     });
   }, [onAnimationComplete]);
 
   return (
     <div ref={containerRef} className={`relative opacity-0 ${className}`}>
-      <svg viewBox="0 0 150 101" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <svg
+        viewBox="0 0 150 101"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-full"
+      >
         <defs>
-          <linearGradient id="pl_g0" x1="44.75" y1="32" x2="55.5" y2="101" gradientUnits="userSpaceOnUse">
+          <linearGradient
+            id="pl_g0"
+            x1="44.75"
+            y1="32"
+            x2="55.5"
+            y2="101"
+            gradientUnits="userSpaceOnUse"
+          >
             <stop stopColor="#11446F" />
             <stop offset="1" stopColor="#304CB0" />
           </linearGradient>
-          <linearGradient id="pl_g1" x1="44.75" y1="32" x2="55.5" y2="101" gradientUnits="userSpaceOnUse">
+          <linearGradient
+            id="pl_g1"
+            x1="44.75"
+            y1="32"
+            x2="55.5"
+            y2="101"
+            gradientUnits="userSpaceOnUse"
+          >
             <stop stopColor="#11446F" />
             <stop offset="1" stopColor="#304CB0" />
           </linearGradient>
-          <linearGradient id="pl_g2" x1="28" y1="-4.5" x2="72.25" y2="100" gradientUnits="userSpaceOnUse">
+          <linearGradient
+            id="pl_g2"
+            x1="28"
+            y1="-4.5"
+            x2="72.25"
+            y2="100"
+            gradientUnits="userSpaceOnUse"
+          >
             <stop stopColor="#5CB7C9" />
             <stop offset="1" stopColor="#14204A" />
           </linearGradient>
         </defs>
-
-        {/* stroke path — top-right curl */}
-        <path
-          d="M132.5 29C132.5 29 138 27 140 25.5C142 24 146.5 20 146.5 20"
-          stroke="#3E99AB"
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
 
         {/* gradient fills */}
         <path
@@ -83,6 +106,12 @@ export default function AnimatedLogo({
           fill="#3E99AB"
         />
         <path d="M123.5 2L126 4L116.182 16H111L123.5 2Z" fill="#3E99AB" />
+        <path
+          d="M132.5 29C132.5 29 138 27 140 25.5C142 24 146.5 20 146.5 20"
+          stroke="#3E99AB"
+          strokeWidth="3"
+          strokeLinecap="round"
+        />
 
         {/* three circles top-right */}
         <circle cx="123.5" cy="4" r="4" fill="#3E99AB" />
