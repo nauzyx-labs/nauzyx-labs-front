@@ -1,5 +1,9 @@
+"use client";
+
+import gsap from "gsap";
+import { BarChart3, Bot, LayoutGrid, Server, Zap } from "lucide-react";
 import Image from "next/image";
-import { Bot, BarChart3, Server, Zap, LayoutGrid } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 const SERVICES = [
   {
@@ -84,9 +88,97 @@ function ServiceCard({
 }
 
 const ServicesSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement[]>([]);
+  const titleRef = useRef<HTMLDivElement>(null);
+
+  const setCardRef = (el: HTMLDivElement | null, index: number) => {
+    if (!el) return;
+    cardsRef.current[index] = el;
+  };
+
+  useEffect(() => {
+    if (!containerRef.current || !sectionRef.current) return;
+    const container = containerRef.current;
+    const convergenceStrength = 0.65;
+    const stackOffsets = [
+      { x: 0, y: 0 },
+      { x: 140, y: 50 },
+      { x: -140, y: 50 },
+      { x: 100, y: -70 },
+      { x: -100, y: -70 },
+    ];
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top top",
+        end: "+=140%",
+        scrub: 1.2,
+        pin: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+      },
+    });
+
+    cardsRef.current.forEach((card, i) => {
+      tl.to(
+        card,
+        {
+          x: () => {
+            const containerRect = container.getBoundingClientRect();
+            const cardRect = card.getBoundingClientRect();
+
+            const offsetX =
+              containerRect.left +
+              containerRect.width / 2 -
+              (cardRect.left + cardRect.width / 2);
+
+            return offsetX * convergenceStrength + stackOffsets[i].x;
+          },
+
+          y: () => {
+            const containerRect = container.getBoundingClientRect();
+            const cardRect = card.getBoundingClientRect();
+
+            const offsetY =
+              containerRect.top +
+              containerRect.height / 2 -
+              (cardRect.top + cardRect.height / 2);
+
+            return offsetY * convergenceStrength + stackOffsets[i].y;
+          },
+
+          scale: 1.06,
+          ease: "power2.out",
+        },
+        0,
+      );
+    });
+
+    if (titleRef.current) {
+      tl.to(
+        titleRef.current,
+        {
+          scale: 0.78,
+          opacity: 0.85,
+          ease: "power2.out",
+        },
+        0,
+      );
+    }
+  }, []);
+
   return (
-    <section className="services-heading relative flex items-center justify-center min-h-dvh w-full overflow-hidden">
-      <div className="relative z-10 text-center px-4 pointer-events-none select-none">
+    <section
+      ref={sectionRef}
+      className="services-heading relative flex items-center justify-center min-h-dvh w-full overflow-hidden"
+    >
+      <div
+        ref={titleRef}
+        className="relative z-10 text-center px-4 pointer-events-none select-none"
+      >
         <div className="inline-flex mb-8 items-center px-6 py-2.5 rounded-full border border-[rgb(33,127,241)] text-[rgb(33,127,241)] text-sm font-semibold">
           Services
         </div>
@@ -100,10 +192,11 @@ const ServicesSection = () => {
       </div>
       {/* Bounded Card Container */}
       <div className="absolute inset-0 flex justify-center">
-        <div className="relative w-full max-w-7xl">
-          {SERVICES.map((svc) => (
+        <div ref={containerRef} className="relative w-full max-w-7xl">
+          {SERVICES.map((svc, i) => (
             <div
               key={svc.id}
+              ref={(el) => setCardRef(el, i)}
               className={`absolute ${svc.position} z-20`}
               style={{ transform: "scale(0.92)" }}
             >

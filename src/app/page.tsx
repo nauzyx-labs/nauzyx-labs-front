@@ -69,17 +69,6 @@ export default function Home() {
         },
         0.5,
       );
-
-      gsap.from(".services-heading", {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".services-heading",
-          start: "top 88%",
-        },
-      });
     }, mainRef);
 
     return () => ctx.revert();
