@@ -8,6 +8,7 @@ import Lenis from "lenis";
 import { useEffect, useRef, useState } from "react";
 import TopNavigation from "./_components/TopNavigation";
 import HeroSection from "./_sections/HeroSection";
+import ServicesSection from "./_sections/ServicesSection";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -95,6 +96,7 @@ export default function Home() {
       >
         <TopNavigation navDark={navDark} />
         <HeroSection heroRef={heroRef as React.RefObject<HTMLElement>} />
+        <ServicesSection />
       </div>
     </>
   );

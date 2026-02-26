@@ -81,7 +81,7 @@ const HeroSection = ({
       <p className="hero-item text-white/70 text-xs font-bold tracking-[0.25em] uppercase mb-4 relative z-10">
         Digital Solutions for Modern Business
       </p>
-      <h1 className="hero-item relative z-10 text-white font-medium text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.0] max-w-4xl mb-0">
+      <h1 className="hero-item relative z-10 text-white font-medium text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-none max-w-4xl mb-0">
         Transform Your
         <br />
         Business with
