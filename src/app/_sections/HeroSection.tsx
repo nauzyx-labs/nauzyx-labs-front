@@ -59,6 +59,8 @@ const HeroSection = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLElement>(null);
+  const grainientRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -71,6 +73,34 @@ const HeroSection = ({
         pin: panelRef.current,
         pinSpacing: false,
       });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1.5,
+        },
+      });
+
+      tl.to(
+        grainientRef.current,
+        {
+          y: "-130vh",
+          ease: "none",
+        },
+        0,
+      );
+
+      // Content moves up faster (closer to viewer)
+      tl.to(
+        contentRef.current,
+        {
+          y: "-110vh",
+          ease: "none",
+        },
+        0,
+      );
     },
     { scope: containerRef },
   );
@@ -86,12 +116,15 @@ const HeroSection = ({
         ref={panelRef}
         className="relative w-full h-screen overflow-hidden"
       >
-        <div className="absolute inset-0 z-0">
+        <div
+          ref={grainientRef}
+          className="absolute top-0 left-0 right-0 h-[130vh] z-0"
+        >
           <Grainient
             color1="#1b3864"
             color2="#1c4786"
             color3="#3e99ab"
-            timeSpeed={0.55}
+            timeSpeed={0.5}
             colorBalance={-0.08}
             warpStrength={2.25}
             warpFrequency={8.1}
@@ -105,14 +138,17 @@ const HeroSection = ({
             gamma={1}
             saturation={1}
             centerX={0}
-            centerY={0.17}
-            zoom={1}
+            centerY={0.3}
+            zoom={0}
           />
         </div>
 
-        <div className="relative z-10 w-full h-full flex flex-col justify-end pb-12 sm:pb-16 px-4 sm:px-6 md:px-10">
+        <div
+          ref={contentRef}
+          className="relative z-10 w-full h-full flex flex-col justify-end pb-12 sm:pb-16 px-4 sm:px-6 md:px-10"
+        >
           <nav
-            className={`top-nav fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-8 py-4 sm:py-5 transition-all duration-500 opacity-100 translate-y-0 text-white`}
+            className={`top-nav absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-8 py-4 sm:py-5 transition-all duration-500 opacity-100 text-white`}
           >
             <div className="flex items-center gap-1.5 sm:gap-2">
               <Logo className="w-6 sm:w-8 h-auto" />

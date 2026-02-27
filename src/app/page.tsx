@@ -95,7 +95,7 @@ export default function Home() {
           heroRef={heroRef as React.RefObject<HTMLDivElement | null>}
         />
         <div className="relative z-20 -mt-[100vh]">
-          <div className="bg-white rounded-t-[3rem] shadow-[0_-20px_50px_rgba(0,0,0,0.5)] relative flex flex-col pt-10">
+          <div className="bg-white rounded-t-[3rem] relative flex flex-col pt-8">
             <ServicesSection />
             <ClientsSection />
             <ProjectsSection />
