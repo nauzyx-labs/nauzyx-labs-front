@@ -8,10 +8,9 @@ const sora = Sora({
 });
 
 export const metadata: Metadata = {
-  title: "Aylix | The AI Workforce for Enterprise",
-  description:
-    "Scale your operations with autonomous AI agents. Secure, compliant, and ready for enterprise.",
-  keywords: ["AI Workforce", "Enterprise AI", "Automation", "SaaS"],
+  title: "nauzyxlabs.",
+  description: "Digital Product Studio",
+  keywords: ["Digital Product Studio", "Web3", "AI", "Blockchain", "SaaS"],
 };
 
 export default function RootLayout({

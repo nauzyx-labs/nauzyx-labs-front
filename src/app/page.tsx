@@ -6,9 +6,13 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { useEffect, useRef, useState } from "react";
+import Footer from "./_components/Footer";
 import TopNavigation from "./_components/TopNavigation";
+import ClientsSection from "./_sections/ClientsSection";
 import HeroSection from "./_sections/HeroSection";
+import ProjectsSection from "./_sections/ProjectsSection";
 import ServicesSection from "./_sections/ServicesSection";
+import TestimonialsSection from "./_sections/TestimonialsSection";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -42,36 +46,41 @@ export default function Home() {
   useEffect(() => {
     if (!loaded) return;
 
-    const ctx = gsap.context(() => {
-      gsap.set(".hero-item", { opacity: 0, y: 60 });
-      gsap.set("nav", { opacity: 0, y: -20 });
+    // Use a small timeout to let Lenis and the page layout settle before animating
+    const timeout = setTimeout(() => {
+      const ctx = gsap.context(() => {
+        gsap.set(".hero-item", { opacity: 0, y: 60 });
+        gsap.set("nav", { opacity: 0, y: -20 });
 
-      const tl = gsap.timeline();
+        const tl = gsap.timeline();
 
-      tl.to(
-        "nav",
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power2.out",
-        },
-        0.3,
-      );
-      tl.to(
-        ".hero-item",
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          stagger: 0.12,
-          ease: "back.out",
-        },
-        0.5,
-      );
-    }, mainRef);
+        tl.to(
+          "nav",
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power2.out",
+          },
+          0.3,
+        );
+        tl.to(
+          ".hero-item",
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            stagger: 0.12,
+            ease: "back.out",
+          },
+          0.5,
+        );
+      }, mainRef);
 
-    return () => ctx.revert();
+      return () => ctx.revert();
+    }, 100);
+
+    return () => clearTimeout(timeout);
   }, [loaded]);
 
   return (
@@ -84,8 +93,18 @@ export default function Home() {
         className="bg-white text-gray-900 selection:bg-blue-500 selection:text-white font-sans overflow-x-hidden"
       >
         <TopNavigation navDark={navDark} />
-        <HeroSection heroRef={heroRef as React.RefObject<HTMLElement>} />
-        <ServicesSection />
+        <HeroSection
+          heroRef={heroRef as React.RefObject<HTMLDivElement | null>}
+        />
+        <div className="relative z-20 -mt-[100vh]">
+          <div className="bg-white rounded-t-[3rem] shadow-[0_-20px_50px_rgba(0,0,0,0.5)] relative flex flex-col pt-10">
+            <ServicesSection />
+            <ClientsSection />
+            <ProjectsSection />
+            <TestimonialsSection />
+            <Footer />
+          </div>
+        </div>
       </div>
     </>
   );

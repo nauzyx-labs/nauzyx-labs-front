@@ -101,23 +101,21 @@ const ServicesSection = () => {
   useEffect(() => {
     if (!containerRef.current || !sectionRef.current) return;
     const container = containerRef.current;
-    const convergenceStrength = 0.65;
+    const convergenceStrength = 1;
     const stackOffsets = [
       { x: 0, y: 0 },
-      { x: 140, y: 50 },
-      { x: -140, y: 50 },
-      { x: 100, y: -70 },
-      { x: -100, y: -70 },
+      { x: 0, y: 0 },
+      { x: 0, y: 0 },
+      { x: 0, y: 0 },
+      { x: 0, y: 0 },
     ];
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
         start: "top top",
-        end: "+=140%",
+        end: "bottom top",
         scrub: 1.2,
-        pin: true,
-        anticipatePin: 1,
         invalidateOnRefresh: true,
       },
     });

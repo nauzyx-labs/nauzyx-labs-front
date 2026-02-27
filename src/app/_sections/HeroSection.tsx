@@ -1,6 +1,14 @@
+"use client";
+
 import Grainient from "@/components/Grainient";
 import { MouseIcon } from "lucide-react";
 import Image from "next/image";
+import { useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const AVATAR_URLS = [
   "https://i.pravatar.cc/40?img=1",
@@ -46,73 +54,103 @@ function AvatarGroup() {
 const HeroSection = ({
   heroRef,
 }: {
-  heroRef: React.RefObject<HTMLElement>;
+  heroRef: React.RefObject<HTMLDivElement | null>;
 }) => {
-  return (
-    <section
-      ref={heroRef}
-      className="relative min-h-screen flex flex-col justify-end pb-12 sm:pb-16 px-4 sm:px-6 md:px-10 overflow-hidden"
-    >
-      {/* Grainient WebGL background */}
-      <div className="absolute inset-0 z-0">
-        <Grainient
-          color1="#1b3864"
-          color2="#1c4786"
-          color3="#3e99ab"
-          timeSpeed={0.55}
-          colorBalance={-0.08}
-          warpStrength={2.25}
-          warpFrequency={8.1}
-          warpSpeed={1.2}
-          warpAmplitude={43}
-          blendAngle={48}
-          blendSoftness={0.18}
-          rotationAmount={600}
-          grainAmount={0}
-          contrast={1.5}
-          gamma={1}
-          saturation={1}
-          centerX={0}
-          centerY={0.17}
-          zoom={1}
-        />
-      </div>
+  const containerRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
 
-      <p className="hero-item text-white/70 text-xs font-bold tracking-[0.25em] uppercase mb-4 relative z-10">
-        Digital Solutions for Modern Business
-      </p>
-      <h1 className="hero-item relative z-10 text-white font-medium text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-none max-w-4xl mb-0">
-        Transform Your
-        <br />
-        Business with
-        <br />
-        Smart Solutions
-      </h1>
-      {/* Right side description + CTAs */}
-      <div className="hero-item absolute right-4 sm:right-6 md:right-10 bottom-16 md:bottom-20 max-w-xs md:max-w-sm text-right z-10">
-        <p className="text-white/80 text-xs sm:text-sm leading-relaxed mb-5">
-          <strong>Empower your team.</strong> Drive efficiency, accelerate
-          growth, and stay ahead with cutting-edge digital solutions designed
-          for modern enterprises.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-end">
-          <button className="border border-white/60 text-white text-xs sm:text-sm font-medium px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-white/10 transition-all">
-            Learn more
-          </button>
-          <button className="bg-blue-500/80 text-white text-xs sm:text-sm font-semibold px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-blue-400 transition-all backdrop-blur-sm">
-            Get started
-          </button>
+  useGSAP(() => {
+    if (!panelRef.current || !containerRef.current) return;
+
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top top",
+      end: "bottom top",
+      pin: panelRef.current, 
+      pinSpacing: false 
+    });
+  }, { scope: containerRef });
+
+  return (
+    <div ref={containerRef} className="relative w-full h-[300vh]">
+      <div
+        className="absolute top-0 w-10 h-10 pointer-events-none"
+        ref={heroRef}
+      />
+
+      <section ref={panelRef} className="relative w-full h-[100vh] overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Grainient
+            color1="#1b3864"
+            color2="#1c4786"
+            color3="#3e99ab"
+            timeSpeed={0.55}
+            colorBalance={-0.08}
+            warpStrength={2.25}
+            warpFrequency={8.1}
+            warpSpeed={1.2}
+            warpAmplitude={43}
+            blendAngle={48}
+            blendSoftness={0.18}
+            rotationAmount={600}
+            grainAmount={0}
+            contrast={1.5}
+            gamma={1}
+            saturation={1}
+            centerX={0}
+            centerY={0.17}
+            zoom={1}
+          />
         </div>
-      </div>
-      <div className="hero-item relative z-10 mt-8 sm:mt-12 px-4 sm:px-0">
-        <AvatarGroup />
-      </div>
-      <div className="hero-item absolute bottom-4 sm:bottom-6 right-4 sm:right-10 flex items-center gap-2 text-white/60 text-xs z-10">
-        <MouseIcon size={14} />
-        <span className="hidden sm:inline">Scroll to explore</span>
-        <span className="sm:hidden">Explore</span>
-      </div>
-    </section>
+        
+        <div className="relative z-10 w-full h-full flex flex-col justify-end pb-12 sm:pb-16 px-4 sm:px-6 md:px-10">
+          <div className="mb-4">
+            <p className="hero-item text-white/70 text-xs font-bold tracking-[0.25em] uppercase text-left">
+              Digital Solutions for Modern Business
+            </p>
+          </div>
+
+          <div className="max-w-4xl text-left">
+            <h1 className="hero-item text-white font-medium text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-none mb-0">
+              Transform Your
+              <br />
+              Business with
+              <br />
+              Smart Solutions
+            </h1>
+          </div>
+
+          <div className="absolute right-4 sm:right-6 md:right-10 bottom-16 md:bottom-20 max-w-xs md:max-w-sm text-right">
+            <div className="hero-item">
+              <p className="text-white/80 text-xs sm:text-sm leading-relaxed mb-5">
+                <strong>Empower your team.</strong> Drive efficiency, accelerate
+                growth, and stay ahead with cutting-edge digital solutions
+                designed for modern enterprises.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-end">
+                <button className="border border-white/60 text-white text-xs sm:text-sm font-medium px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-white/10 transition-all">
+                  Learn more
+                </button>
+                <button className="bg-blue-500/80 text-white text-xs sm:text-sm font-semibold px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-blue-400 transition-all backdrop-blur-sm">
+                  Get started
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 sm:mt-12 px-4 sm:px-0 text-left">
+            <div className="hero-item">
+              <AvatarGroup />
+            </div>
+          </div>
+        </div>
+
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/70 text-xs z-20">
+          <MouseIcon size={16} className="mb-2 animate-bounce" />
+          Scroll down
+        </div>
+      </section>
+    </div>
   );
 };
 
