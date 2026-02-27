@@ -7,7 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { useEffect, useRef, useState } from "react";
 import Footer from "./_components/Footer";
-import TopNavigation from "./_components/TopNavigation";
+import Navigation from "./_components/Navigation";
 import ClientsSection from "./_sections/ClientsSection";
 import HeroSection from "./_sections/HeroSection";
 import ProjectsSection from "./_sections/ProjectsSection";
@@ -45,17 +45,15 @@ export default function Home() {
 
   useEffect(() => {
     if (!loaded) return;
-
-    // Use a small timeout to let Lenis and the page layout settle before animating
     const timeout = setTimeout(() => {
       const ctx = gsap.context(() => {
         gsap.set(".hero-item", { opacity: 0, y: 60 });
-        gsap.set("nav", { opacity: 0, y: -20 });
+        gsap.set(".top-nav", { opacity: 0, y: -20 });
 
         const tl = gsap.timeline();
 
         tl.to(
-          "nav",
+          ".top-nav",
           {
             opacity: 1,
             y: 0,
@@ -92,7 +90,7 @@ export default function Home() {
         ref={mainRef}
         className="bg-white text-gray-900 selection:bg-blue-500 selection:text-white font-sans overflow-x-hidden"
       >
-        <TopNavigation navDark={navDark} />
+        <Navigation showPill={navDark} />
         <HeroSection
           heroRef={heroRef as React.RefObject<HTMLDivElement | null>}
         />

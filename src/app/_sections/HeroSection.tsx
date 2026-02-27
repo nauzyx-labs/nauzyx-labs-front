@@ -1,12 +1,13 @@
 "use client";
 
 import Grainient from "@/components/Grainient";
+import Logo from "@/components/Logo";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MouseIcon } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -59,26 +60,32 @@ const HeroSection = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLElement>(null);
 
-  useGSAP(() => {
-    if (!panelRef.current || !containerRef.current) return;
+  useGSAP(
+    () => {
+      if (!panelRef.current || !containerRef.current) return;
 
-    ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: "top top",
-      end: "bottom top",
-      pin: panelRef.current, 
-      pinSpacing: false 
-    });
-  }, { scope: containerRef });
+      ScrollTrigger.create({
+        trigger: containerRef.current,
+        start: "top top",
+        end: "bottom top",
+        pin: panelRef.current,
+        pinSpacing: false,
+      });
+    },
+    { scope: containerRef },
+  );
 
   return (
-    <div ref={containerRef} className="relative w-full h-[300vh]">
+    <div ref={containerRef} className="relative w-full h-[200vh]">
       <div
         className="absolute top-0 w-10 h-10 pointer-events-none"
         ref={heroRef}
       />
 
-      <section ref={panelRef} className="relative w-full h-[100vh] overflow-hidden">
+      <section
+        ref={panelRef}
+        className="relative w-full h-screen overflow-hidden"
+      >
         <div className="absolute inset-0 z-0">
           <Grainient
             color1="#1b3864"
@@ -102,8 +109,47 @@ const HeroSection = ({
             zoom={1}
           />
         </div>
-        
+
         <div className="relative z-10 w-full h-full flex flex-col justify-end pb-12 sm:pb-16 px-4 sm:px-6 md:px-10">
+          <nav
+            className={`top-nav fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-8 py-4 sm:py-5 transition-all duration-500 opacity-100 translate-y-0 text-white`}
+          >
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <Logo className="w-6 sm:w-8 h-auto" />
+              <span className="font-bold text-base sm:text-lg tracking-tight">
+                nauzyxlabs
+              </span>
+            </div>
+
+            <div className="hidden sm:flex items-center gap-6">
+              <button
+                className={`text-sm font-medium transition-colors text-white hover:text-white/80`}
+              >
+                Home
+              </button>
+              <button
+                className={`text-sm font-medium transition-colors text-white hover:text-white/80`}
+              >
+                Services
+              </button>
+              <button
+                className={`text-sm font-medium transition-colors text-white hover:text-white/80`}
+              >
+                About
+              </button>
+              <button
+                className={`text-sm font-medium transition-colors text-white hover:text-white/80`}
+              >
+                Contact
+              </button>
+            </div>
+
+            <button
+              className={`border text-xs sm:text-sm font-semibold px-3 sm:px-5 py-1.5 sm:py-2 rounded-full transition-all border-white text-white hover:bg-white/10 `}
+            >
+              Get started
+            </button>
+          </nav>
           <div className="mb-4">
             <p className="hero-item text-white/70 text-xs font-bold tracking-[0.25em] uppercase text-left">
               Digital Solutions for Modern Business
