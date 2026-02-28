@@ -1,9 +1,13 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BarChart3, Bot, LayoutGrid, Server, Zap } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const SERVICES = [
   {
@@ -89,6 +93,7 @@ function ServiceCard({
 
 const ServicesSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
   const titleRef = useRef<HTMLDivElement>(null);
@@ -98,113 +103,121 @@ const ServicesSection = () => {
     cardsRef.current[index] = el;
   };
 
-  useEffect(() => {
-    if (!containerRef.current || !sectionRef.current) return;
-    const container = containerRef.current;
-    const convergenceStrength = 1;
-    const stackOffsets = [
-      { x: 0, y: 0 },
-      { x: 0, y: 0 },
-      { x: 0, y: 0 },
-      { x: 0, y: 0 },
-      { x: 0, y: 0 },
-    ];
+  useGSAP(
+    () => {
+      if (!containerRef.current || !sectionRef.current) return;
+      const container = containerRef.current;
+      const convergenceStrength = 1;
+      const stackOffsets = [
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+      ];
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1.2,
-        invalidateOnRefresh: true,
-      },
-    });
-
-    cardsRef.current.forEach((card, i) => {
-      tl.to(
-        card,
-        {
-          x: () => {
-            const containerRect = container.getBoundingClientRect();
-            const cardRect = card.getBoundingClientRect();
-
-            const offsetX =
-              containerRect.left +
-              containerRect.width / 2 -
-              (cardRect.left + cardRect.width / 2);
-
-            return offsetX * convergenceStrength + stackOffsets[i].x;
-          },
-
-          y: () => {
-            const containerRect = container.getBoundingClientRect();
-            const cardRect = card.getBoundingClientRect();
-
-            const offsetY =
-              containerRect.top +
-              containerRect.height / 2 -
-              (cardRect.top + cardRect.height / 2);
-
-            return offsetY * convergenceStrength + stackOffsets[i].y;
-          },
-
-          scale: 1.06,
-          ease: "power2.out",
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1.2,
+          invalidateOnRefresh: true,
         },
-        0,
-      );
-    });
+      });
 
-    if (titleRef.current) {
-      tl.to(
-        titleRef.current,
-        {
-          scale: 0.78,
-          opacity: 0.85,
-          ease: "power2.out",
-        },
-        0,
-      );
-    }
-  }, []);
+      cardsRef.current.forEach((card, i) => {
+        tl.to(
+          card,
+          {
+            x: () => {
+              const containerRect = container.getBoundingClientRect();
+              const cardRect = card.getBoundingClientRect();
+
+              const offsetX =
+                containerRect.left +
+                containerRect.width / 2 -
+                (cardRect.left + cardRect.width / 2);
+
+              return offsetX * convergenceStrength + stackOffsets[i].x;
+            },
+
+            y: () => {
+              const containerRect = container.getBoundingClientRect();
+              const cardRect = card.getBoundingClientRect();
+
+              const offsetY =
+                containerRect.top +
+                containerRect.height / 2 -
+                (cardRect.top + cardRect.height / 2);
+
+              return offsetY * convergenceStrength + stackOffsets[i].y;
+            },
+
+            scale: 1.06,
+            ease: "power2.out",
+          },
+          0,
+        );
+      });
+
+      if (titleRef.current) {
+        tl.to(
+          titleRef.current,
+          {
+            scale: 0.78,
+            opacity: 0.85,
+            ease: "power2.out",
+          },
+          0,
+        );
+      }
+    },
+    { scope: sectionRef },
+  );
 
   return (
     <section
       ref={sectionRef}
-      className="services-heading relative flex items-center justify-center min-h-dvh w-full overflow-hidden"
+      className="services-heading relative w-full h-[170vh]"
     >
       <div
-        ref={titleRef}
-        className="relative z-10 text-center px-4 pointer-events-none select-none"
+        ref={stickyRef}
+        className="sticky top-0 w-full h-screen flex items-center justify-center overflow-hidden"
       >
-        <div className="inline-flex mb-8 items-center px-6 py-2.5 rounded-full border border-[rgb(33,127,241)] text-[rgb(33,127,241)] text-sm font-semibold">
-          Services
+        <div
+          ref={titleRef}
+          className="relative z-10 text-center px-4 pointer-events-none select-none"
+        >
+          <div className="inline-flex mb-8 items-center px-6 py-2.5 rounded-full border border-[rgb(33,127,241)] text-[rgb(33,127,241)] text-sm font-semibold">
+            Services
+          </div>
+          <h2 className="text-4xl xl:text-7xl font-medium leading-9 xl:leading-16 tracking-tight text-[rgb(33,127,241)]">
+            Manual Work
+            <br />
+            Slows You Down.
+            <br />
+            AI Changes That.
+          </h2>
         </div>
-        <h2 className="text-4xl xl:text-7xl font-medium leading-9 xl:leading-16 tracking-tight text-[rgb(33,127,241)]">
-          Manual Work
-          <br />
-          Slows You Down.
-          <br />
-          AI Changes That.
-        </h2>
-      </div>
-      {/* Bounded Card Container */}
-      <div className="absolute inset-0 flex justify-center">
-        <div ref={containerRef} className="relative w-full max-w-7xl">
-          {SERVICES.map((svc, i) => (
-            <div
-              key={svc.id}
-              ref={(el) => setCardRef(el, i)}
-              className={`absolute ${svc.position} z-20`}
-              style={{ transform: "scale(0.92)" }}
-            >
-              <ServiceCard
-                title={svc.title}
-                icon={svc.icon}
-                image={svc.image}
-              />
-            </div>
-          ))}
+        {/* Bounded Card Container */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div ref={containerRef} className="relative w-full h-full max-w-7xl">
+            {SERVICES.map((svc, i) => (
+              <div
+                key={svc.id}
+                ref={(el) => setCardRef(el, i)}
+                className={`absolute ${svc.position} z-20`}
+                style={{ transform: "scale(0.92)" }}
+              >
+                <ServiceCard
+                  title={svc.title}
+                  icon={svc.icon}
+                  image={svc.image}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

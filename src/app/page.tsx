@@ -88,7 +88,7 @@ export default function Home() {
 
       <div
         ref={mainRef}
-        className="bg-white text-gray-900 selection:bg-blue-500 selection:text-white font-sans overflow-x-hidden"
+        className="bg-white text-gray-900 selection:bg-blue-500 selection:text-white font-sans overflow-x-clip"
       >
         <Navigation showPill={navDark} />
         <HeroSection
