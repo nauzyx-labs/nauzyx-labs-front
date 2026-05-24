@@ -125,21 +125,21 @@ const HeroSection = ({
             color2="#1c4786"
             color3="#3e99ab"
             timeSpeed={0.5}
-            colorBalance={-0.08}
+            colorBalance={0.5}
             warpStrength={2.25}
             warpFrequency={8.1}
-            warpSpeed={1.2}
-            warpAmplitude={43}
+            warpSpeed={15}
+            warpAmplitude={20}
             blendAngle={48}
             blendSoftness={0.18}
             rotationAmount={600}
-            grainAmount={0}
+            grainAmount={0.05}
             contrast={1.5}
-            gamma={1}
-            saturation={1}
+            gamma={0.9}
+            saturation={0.8}
             centerX={0}
-            centerY={0.3}
-            zoom={0}
+            centerY={0.5}
+            zoom={0.25}
           />
         </div>
 
