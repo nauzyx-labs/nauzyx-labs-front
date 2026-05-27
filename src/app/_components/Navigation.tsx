@@ -5,12 +5,23 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 const NAV_ITEMS = [
-  { label: "Home", href: "#" },
+  { label: "Home", href: "#home" },
   { label: "Services", href: "#services" },
-  { label: "Projects", href: "#projects" },
   { label: "About", href: "#about" },
+  { label: "Projects", href: "#projects" },
   { label: "Contact", href: "#contact" },
 ];
+
+function scrollToSection(href: string) {
+  if (href === "#home") {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+  const el = document.querySelector(href);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
 
 const Navigation = ({ showPill }: { showPill?: boolean }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -25,14 +36,18 @@ const Navigation = ({ showPill }: { showPill?: boolean }) => {
             : "opacity-0 pointer-events-none translate-y-8"
         } text-gray-900`}
       >
-        <div className="flex items-center gap-1.5 md:gap-2">
+        <button
+          onClick={() => scrollToSection("#home")}
+          className="flex items-center gap-1.5 md:gap-2"
+        >
           <Logo className="w-5 md:w-6 h-auto" />
-        </div>
+        </button>
 
         <div className="flex items-center gap-4 md:gap-5">
           {NAV_ITEMS.map((item) => (
             <button
               key={item.label}
+              onClick={() => scrollToSection(item.href)}
               className="text-sm font-medium text-gray-700 hover:text-black transition-colors"
             >
               {item.label}
@@ -40,7 +55,10 @@ const Navigation = ({ showPill }: { showPill?: boolean }) => {
           ))}
         </div>
 
-        <button className="bg-gray-900 text-white text-xs md:text-sm font-semibold px-4 py-2 rounded-full hover:bg-gray-800 transition-colors whitespace-nowrap">
+        <button
+          onClick={() => scrollToSection("#contact")}
+          className="bg-gray-900 text-white text-xs md:text-sm font-semibold px-4 py-2 rounded-full hover:bg-gray-800 transition-colors whitespace-nowrap"
+        >
           Get started
         </button>
       </nav>
@@ -53,9 +71,12 @@ const Navigation = ({ showPill }: { showPill?: boolean }) => {
             : "opacity-0 pointer-events-none translate-y-8"
         } text-gray-900`}
       >
-        <div className="flex items-center gap-2">
+        <button
+          onClick={() => scrollToSection("#home")}
+          className="flex items-center gap-2"
+        >
           <Logo className="w-5 h-auto" />
-        </div>
+        </button>
 
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
@@ -64,7 +85,10 @@ const Navigation = ({ showPill }: { showPill?: boolean }) => {
           {mobileOpen ? <X size={18} /> : <Menu size={18} />}
         </button>
 
-        <button className="bg-gray-900 text-white text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-gray-800 transition-colors whitespace-nowrap">
+        <button
+          onClick={() => scrollToSection("#contact")}
+          className="bg-gray-900 text-white text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-gray-800 transition-colors whitespace-nowrap"
+        >
           Get started
         </button>
       </nav>
@@ -82,7 +106,10 @@ const Navigation = ({ showPill }: { showPill?: boolean }) => {
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.label}
-                onClick={() => setMobileOpen(false)}
+                onClick={() => {
+                  scrollToSection(item.href);
+                  setMobileOpen(false);
+                }}
                 className="block w-full text-left px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-black hover:bg-gray-50 rounded-lg transition-colors"
               >
                 {item.label}

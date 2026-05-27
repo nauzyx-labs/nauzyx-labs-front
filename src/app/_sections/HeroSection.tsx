@@ -158,17 +158,32 @@ const HeroSection = ({
             </div>
 
             <div className="hidden md:flex items-center gap-6">
-              {["Home", "Services", "About", "Contact"].map((item) => (
+              {[
+                { label: "Home", href: "#home" },
+                { label: "Services", href: "#services" },
+                { label: "About", href: "#about" },
+                { label: "Contact", href: "#contact" },
+              ].map((item) => (
                 <button
-                  key={item}
+                  key={item.label}
+                  onClick={() => {
+                    if (item.href === "#home") {
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    } else {
+                      document.querySelector(item.href)?.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }}
                   className="text-sm font-medium transition-colors text-white hover:text-white/80"
                 >
-                  {item}
+                  {item.label}
                 </button>
               ))}
             </div>
 
-            <button className="border text-xs sm:text-sm font-semibold px-3 sm:px-5 py-1.5 sm:py-2 rounded-full transition-all border-white text-white hover:bg-white/10">
+            <button
+              onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
+              className="border text-xs sm:text-sm font-semibold px-3 sm:px-5 py-1.5 sm:py-2 rounded-full transition-all border-white text-white hover:bg-white/10"
+            >
               Get started
             </button>
           </nav>
@@ -203,10 +218,16 @@ const HeroSection = ({
                   solutions designed for modern enterprises.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-start md:justify-end">
-                  <button className="border border-white/60 text-white text-xs sm:text-sm font-medium px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-white/10 transition-all">
+                  <button
+                    onClick={() => document.querySelector("#about")?.scrollIntoView({ behavior: "smooth" })}
+                    className="border border-white/60 text-white text-xs sm:text-sm font-medium px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-white/10 transition-all"
+                  >
                     Learn more
                   </button>
-                  <button className="bg-blue-500/80 text-white text-xs sm:text-sm font-semibold px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-blue-400 transition-all backdrop-blur-sm">
+                  <button
+                    onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
+                    className="bg-blue-500/80 text-white text-xs sm:text-sm font-semibold px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-blue-400 transition-all backdrop-blur-sm"
+                  >
                     Get started
                   </button>
                 </div>

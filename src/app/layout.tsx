@@ -36,7 +36,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={sora.variable}>
+    <html lang="en" className={`${sora.variable} scroll-smooth`}>
       <body className="antialiased font-sora">{children}</body>
     </html>
   );

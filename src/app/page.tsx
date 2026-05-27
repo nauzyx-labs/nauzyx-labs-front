@@ -96,6 +96,7 @@ export default function Home() {
         ref={mainRef}
         className="bg-white text-gray-900 selection:bg-blue-500 selection:text-white font-sans overflow-x-clip"
       >
+        <div id="home" className="absolute top-0" />
         <Navigation showPill={navDark} />
         <HeroSection
           heroRef={heroRef as React.RefObject<HTMLDivElement | null>}

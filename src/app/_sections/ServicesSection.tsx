@@ -16,7 +16,6 @@ const SERVICES = [
     icon: Bot,
     image:
       "https://framerusercontent.com/images/vLGZ7zrhEIqoSQ0lvhS8aCFwHw.jpg?width=410&height=326",
-    position: "top-[8%] left-[2%]",
   },
   {
     id: "ai-reports",
@@ -24,7 +23,6 @@ const SERVICES = [
     icon: BarChart3,
     image:
       "https://framerusercontent.com/images/I0WkDdBbRV8BJg0aAxZyyn8Ka4.jpg?width=410&height=326",
-    position: "top-[42%] left-[0%]",
   },
   {
     id: "integrations",
@@ -32,7 +30,6 @@ const SERVICES = [
     icon: LayoutGrid,
     image:
       "https://framerusercontent.com/images/YSybZkqkAcjWEoOf9ur8tRKiE.jpg?width=410&height=326",
-    position: "top-[6%] right-[2%]",
   },
   {
     id: "automation",
@@ -40,7 +37,6 @@ const SERVICES = [
     icon: Zap,
     image:
       "https://framerusercontent.com/images/SlNqGUqwLH7j93oGQqw6qf1rzA.jpg?width=410&height=326",
-    position: "top-[50%] right-[2%]",
   },
   {
     id: "systems",
@@ -48,7 +44,6 @@ const SERVICES = [
     icon: Server,
     image:
       "https://framerusercontent.com/images/7hu04KS49K7SuKEa8fyKrGSg.jpg?width=410&height=326",
-    position: "bottom-[4%] left-[35%]",
   },
 ];
 
@@ -62,7 +57,7 @@ function ServiceCard({
   readonly image: string;
 }) {
   return (
-    <div className="w-55 rounded-[26px] bg-[#f3f6fb] overflow-hidden">
+    <div className="w-full max-w-[220px] rounded-[26px] bg-[#f3f6fb] overflow-hidden">
       <div className="flex items-center gap-2.5 px-4 pt-4 pb-3">
         <div
           className="w-7 h-7 rounded-[6px] flex items-center justify-center shrink-0"
@@ -108,33 +103,35 @@ const ServicesSection = () => {
       if (!containerRef.current || !sectionRef.current || !panelRef.current)
         return;
 
+      // Only run convergence animation on desktop (md+)
+      const mql = window.matchMedia("(min-width: 768px)");
+      if (!mql.matches) return;
+
       const container = containerRef.current;
       const cards = cardsRef.current.filter(Boolean);
       const convergenceStrength = 1;
 
-      // Pin the panel — stays fixed on screen until animation completes
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
-        end: "bottom bottom",
+        end: "60% top",
         pin: panelRef.current,
         pinSpacing: false,
       });
 
-      // Build a master timeline scrubbed by scroll
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "bottom bottom",
+          end: "60% top",
           scrub: 1.5,
           invalidateOnRefresh: true,
         },
       });
 
-      // Phase 1 (0%–60%): Cards converge to center one by one
+      // Phase 1: Cards converge to center one by one
       cards.forEach((card, i) => {
-        const position = i / cards.length; // stagger across 0 → ~0.8
+        const position = i / cards.length;
 
         tl.to(
           card,
@@ -163,11 +160,11 @@ const ServicesSection = () => {
             rotation: 0,
             ease: "power2.out",
           },
-          position * 0.6, // stagger start across first 60% of timeline
+          position * 0.6,
         );
       });
 
-      // Phase 2 (60%–100%): Title fades, cards hold — user sees converged state
+      // Phase 2: Title fades
       if (titleRef.current) {
         tl.to(
           titleRef.current,
@@ -179,7 +176,6 @@ const ServicesSection = () => {
           0,
         );
 
-        // Fade title out at the end
         tl.to(
           titleRef.current,
           {
@@ -191,7 +187,7 @@ const ServicesSection = () => {
         );
       }
 
-      // Cards pulse slightly at the end to signal completion
+      // Cards pulse at the end
       cards.forEach((card) => {
         tl.to(
           card,
@@ -210,15 +206,15 @@ const ServicesSection = () => {
     <section
       ref={sectionRef}
       className="services-heading relative w-full"
-      style={{ height: "300vh" }}
+      style={{ minHeight: "200vh" }}
     >
       <div
         ref={panelRef}
-        className="relative w-full h-screen flex items-center justify-center overflow-hidden"
+        className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden py-16 md:py-0"
       >
         <div
           ref={titleRef}
-          className="relative z-10 text-center px-4 pointer-events-none select-none"
+          className="relative z-10 text-center px-4 pointer-events-none select-none mb-8 md:mb-0"
         >
           <div className="inline-flex mb-8 items-center px-6 py-2.5 rounded-full border border-[rgb(33,127,241)] text-[rgb(33,127,241)] text-sm font-semibold">
             Services
@@ -232,14 +228,24 @@ const ServicesSection = () => {
           </h2>
         </div>
 
-        {/* Bounded Card Container */}
-        <div className="absolute inset-0 flex items-center justify-center">
+        {/* Desktop: absolute positioned cards for convergence animation */}
+        <div className="hidden md:flex absolute inset-0 items-center justify-center">
           <div ref={containerRef} className="relative w-full h-full max-w-7xl">
             {SERVICES.map((svc, i) => (
               <div
                 key={svc.id}
                 ref={(el) => setCardRef(el, i)}
-                className={`absolute ${svc.position} z-20`}
+                className={`absolute z-20 ${
+                  i === 0
+                    ? "top-[8%] left-[2%]"
+                    : i === 1
+                      ? "top-[42%] left-[0%]"
+                      : i === 2
+                        ? "top-[6%] right-[2%]"
+                        : i === 3
+                          ? "top-[50%] right-[2%]"
+                          : "bottom-[4%] left-[35%]"
+                }`}
                 style={{ transform: "scale(0.92)" }}
               >
                 <ServiceCard
@@ -250,6 +256,19 @@ const ServicesSection = () => {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Mobile: scrollable horizontal card layout */}
+        <div className="flex md:hidden w-full overflow-x-auto gap-4 px-6 pb-4 snap-x snap-mandatory scrollbar-hide">
+          {SERVICES.map((svc) => (
+            <div key={svc.id} className="snap-center shrink-0 first:pl-2 last:pr-2">
+              <ServiceCard
+                title={svc.title}
+                icon={svc.icon}
+                image={svc.image}
+              />
+            </div>
+          ))}
         </div>
 
         {/* Scroll progress indicator */}
