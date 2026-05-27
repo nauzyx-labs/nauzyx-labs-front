@@ -23,17 +23,24 @@ const CLIENTS = [
 
 const ClientsSection = () => {
   return (
-    <section className="py-24 sm:py-32 bg-white relative z-10 overflow-hidden rounded-[2.5rem] mt-[-2.5rem]">
+    <section id="clients" className="py-24 sm:py-32 bg-white relative z-10 overflow-hidden rounded-[2.5rem] mt-[-2.5rem]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex flex-col items-center justify-center text-center mb-16 px-4">
-          <div className="border border-blue-200 text-blue-500 rounded-full px-4 py-1.5 text-xs sm:text-sm mb-6 bg-white shrink-0 mx-auto">
-            Clients
-          </div>
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-medium text-blue-500 tracking-tight leading-[1.1] max-w-2xl">
-            Trusted by forward
-            <br />
-            thinking teams
-          </h2>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="border border-blue-200 text-blue-500 rounded-full px-4 py-1.5 text-xs sm:text-sm mb-6 bg-white shrink-0 mx-auto inline-block">
+              Clients
+            </div>
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-medium text-blue-500 tracking-tight leading-[1.1] max-w-2xl">
+              Trusted by forward
+              <br />
+              thinking teams
+            </h2>
+          </motion.div>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">

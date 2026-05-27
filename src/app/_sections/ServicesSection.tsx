@@ -93,7 +93,7 @@ function ServiceCard({
 
 const ServicesSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const stickyRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
   const titleRef = useRef<HTMLDivElement>(null);
@@ -105,62 +105,69 @@ const ServicesSection = () => {
 
   useGSAP(
     () => {
-      if (!containerRef.current || !sectionRef.current) return;
-      const container = containerRef.current;
-      const convergenceStrength = 1;
-      const stackOffsets = [
-        { x: 0, y: 0 },
-        { x: 0, y: 0 },
-        { x: 0, y: 0 },
-        { x: 0, y: 0 },
-        { x: 0, y: 0 },
-      ];
+      if (!containerRef.current || !sectionRef.current || !panelRef.current)
+        return;
 
+      const container = containerRef.current;
+      const cards = cardsRef.current.filter(Boolean);
+      const convergenceStrength = 1;
+
+      // Pin the panel — stays fixed on screen until animation completes
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top top",
+        end: "bottom bottom",
+        pin: panelRef.current,
+        pinSpacing: false,
+      });
+
+      // Build a master timeline scrubbed by scroll
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
           end: "bottom bottom",
-          scrub: 1.2,
+          scrub: 1.5,
           invalidateOnRefresh: true,
         },
       });
 
-      cardsRef.current.forEach((card, i) => {
+      // Phase 1 (0%–60%): Cards converge to center one by one
+      cards.forEach((card, i) => {
+        const position = i / cards.length; // stagger across 0 → ~0.8
+
         tl.to(
           card,
           {
             x: () => {
               const containerRect = container.getBoundingClientRect();
               const cardRect = card.getBoundingClientRect();
-
-              const offsetX =
-                containerRect.left +
-                containerRect.width / 2 -
-                (cardRect.left + cardRect.width / 2);
-
-              return offsetX * convergenceStrength + stackOffsets[i].x;
+              return (
+                (containerRect.left +
+                  containerRect.width / 2 -
+                  (cardRect.left + cardRect.width / 2)) *
+                convergenceStrength
+              );
             },
-
             y: () => {
               const containerRect = container.getBoundingClientRect();
               const cardRect = card.getBoundingClientRect();
-
-              const offsetY =
-                containerRect.top +
-                containerRect.height / 2 -
-                (cardRect.top + cardRect.height / 2);
-
-              return offsetY * convergenceStrength + stackOffsets[i].y;
+              return (
+                (containerRect.top +
+                  containerRect.height / 2 -
+                  (cardRect.top + cardRect.height / 2)) *
+                convergenceStrength
+              );
             },
-
             scale: 1.06,
+            rotation: 0,
             ease: "power2.out",
           },
-          0,
+          position * 0.6, // stagger start across first 60% of timeline
         );
       });
 
+      // Phase 2 (60%–100%): Title fades, cards hold — user sees converged state
       if (titleRef.current) {
         tl.to(
           titleRef.current,
@@ -171,7 +178,30 @@ const ServicesSection = () => {
           },
           0,
         );
+
+        // Fade title out at the end
+        tl.to(
+          titleRef.current,
+          {
+            opacity: 0,
+            scale: 0.7,
+            ease: "power2.in",
+          },
+          0.75,
+        );
       }
+
+      // Cards pulse slightly at the end to signal completion
+      cards.forEach((card) => {
+        tl.to(
+          card,
+          {
+            scale: 1.1,
+            ease: "power1.inOut",
+          },
+          0.85,
+        );
+      });
     },
     { scope: sectionRef },
   );
@@ -179,11 +209,12 @@ const ServicesSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="services-heading relative w-full h-[170vh]"
+      className="services-heading relative w-full"
+      style={{ height: "300vh" }}
     >
       <div
-        ref={stickyRef}
-        className="sticky top-0 w-full h-screen flex items-center justify-center overflow-hidden"
+        ref={panelRef}
+        className="relative w-full h-screen flex items-center justify-center overflow-hidden"
       >
         <div
           ref={titleRef}
@@ -200,6 +231,7 @@ const ServicesSection = () => {
             AI Changes That.
           </h2>
         </div>
+
         {/* Bounded Card Container */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div ref={containerRef} className="relative w-full h-full max-w-7xl">
@@ -218,6 +250,13 @@ const ServicesSection = () => {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Scroll progress indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-[rgb(33,127,241)]/50 text-xs z-30 pointer-events-none">
+          <span className="text-[11px] font-medium tracking-widest uppercase">
+            Scroll to explore
+          </span>
         </div>
       </div>
     </section>

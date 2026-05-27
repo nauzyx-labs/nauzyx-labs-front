@@ -8,9 +8,26 @@ const sora = Sora({
 });
 
 export const metadata: Metadata = {
-  title: "nauzyxlabs.",
-  description: "Digital Product Studio",
-  keywords: ["Digital Product Studio", "Web3", "AI", "Blockchain", "SaaS"],
+  title: "NauzyxLabs — Enterprise Identity Platform",
+  description:
+    "SSO, OAuth2, MFA, RBAC, and user management — all in one platform. Ship secure authentication without the complexity.",
+  keywords: [
+    "SSO",
+    "OAuth2",
+    "MFA",
+    "RBAC",
+    "Identity Platform",
+    "Authentication",
+    "User Management",
+    "Enterprise SSO",
+    "SaaS",
+  ],
+  openGraph: {
+    title: "NauzyxLabs — Enterprise Identity Platform",
+    description:
+      "SSO, OAuth2, MFA, RBAC, and user management — all in one platform.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

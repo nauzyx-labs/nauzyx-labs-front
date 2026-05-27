@@ -8,7 +8,9 @@ import Lenis from "lenis";
 import { useEffect, useRef, useState } from "react";
 import Footer from "./_components/Footer";
 import Navigation from "./_components/Navigation";
+import AboutSection from "./_sections/AboutSection";
 import ClientsSection from "./_sections/ClientsSection";
+import CTASection from "./_sections/CTASection";
 import HeroSection from "./_sections/HeroSection";
 import ProjectsSection from "./_sections/ProjectsSection";
 import ServicesSection from "./_sections/ServicesSection";
@@ -35,6 +37,10 @@ export default function Home() {
 
   useEffect(() => {
     const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+
+    // Sync Lenis with GSAP ScrollTrigger
+    lenis.on("scroll", ScrollTrigger.update);
+
     const raf = (t: number) => {
       lenis.raf(t);
       requestAnimationFrame(raf);
@@ -96,10 +102,22 @@ export default function Home() {
         />
         <div className="relative z-20 -mt-[100vh]">
           <div className="bg-white rounded-t-[3rem] relative flex flex-col pt-8">
-            <ServicesSection />
-            <ClientsSection />
-            <ProjectsSection />
+            <div id="services">
+              <ServicesSection />
+            </div>
+            <div id="clients">
+              <ClientsSection />
+            </div>
+            <div id="about">
+              <AboutSection />
+            </div>
+            <div id="projects">
+              <ProjectsSection />
+            </div>
             <TestimonialsSection />
+            <div id="contact">
+              <CTASection />
+            </div>
             <Footer />
           </div>
         </div>

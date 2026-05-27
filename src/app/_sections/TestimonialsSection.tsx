@@ -1,3 +1,5 @@
+"use client";
+
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
@@ -5,51 +7,51 @@ import { useRef } from "react";
 const TESTIMONIALS = [
   {
     quote:
-      "Soho's consulting system completely transformed the way I run my business. It gave me clarity, structure, and a clear path to scaling.",
-    name: "Lauren Meyers",
-    role: "Growth Strategist",
+      "NauzyxLabs cut our auth implementation from 3 months to 2 weeks. The SSO integration with Okta was seamless — our enterprise clients were impressed.",
+    name: "Sarah Chen",
+    role: "CTO, Finova",
     avatar: "https://i.pravatar.cc/150?img=47",
     stars: 5,
   },
   {
     quote:
-      "Soho's consulting system completely transformed the way I run my business. It gave me clarity, structure, and a clear path to scaling.",
-    name: "Lauren Meyers",
-    role: "Growth Strategist",
-    avatar: "https://i.pravatar.cc/150?img=47",
+      "We migrated from a custom auth system to NauzyxLabs and haven't looked back. The RBAC system is incredibly flexible and the audit logs are a compliance lifesaver.",
+    name: "Marcus Rodriguez",
+    role: "VP Engineering, HealthBridge",
+    avatar: "https://i.pravatar.cc/150?img=12",
     stars: 5,
   },
   {
     quote:
-      "Soho's consulting system completely transformed the way I run my business. It gave me clarity, structure, and a clear path to scaling.",
-    name: "Lauren Meyers",
-    role: "Growth Strategist",
-    avatar: "https://i.pravatar.cc/150?img=47",
+      "The developer experience is unmatched. One API call to add Google SSO, another for MFA. Our team stopped debating auth architecture and started shipping features.",
+    name: "Aisha Patel",
+    role: "Lead Developer, EduScale",
+    avatar: "https://i.pravatar.cc/150?img=32",
     stars: 5,
   },
   {
     quote:
-      "Soho's consulting system completely transformed the way I run my business. It gave me clarity, structure, and a clear path to scaling.",
-    name: "Lauren Meyers",
-    role: "Growth Strategist",
-    avatar: "https://i.pravatar.cc/150?img=47",
+      "Multi-tenant organizations with per-org roles — exactly what we needed. NauzyxLabs handles the complexity so we can focus on our product.",
+    name: "James Whitfield",
+    role: "Founder, LogiFlow",
+    avatar: "https://i.pravatar.cc/150?img=53",
     stars: 5,
   },
   {
     quote:
-      "Soho's consulting system completely transformed the way I run my business. It gave me clarity, structure, and a clear path to scaling.",
-    name: "Lauren Meyers",
-    role: "Growth Strategist",
-    avatar: "https://i.pravatar.cc/150?img=47",
+      "Sub-millisecond permission checks at scale. We're serving 2M+ daily active users and the performance hasn't budged. Enterprise-grade infrastructure.",
+    name: "Elena Vasquez",
+    role: "Platform Architect, NexGen",
+    avatar: "https://i.pravatar.cc/150?img=44",
     stars: 5,
     highlight: true,
   },
   {
     quote:
-      "Soho's consulting system completely transformed the way I run my business. It gave me clarity, structure, and a clear path to scaling.",
-    name: "Lauren Meyers",
-    role: "Growth Strategist",
-    avatar: "https://i.pravatar.cc/150?img=47",
+      "The webhook system with HMAC signatures gives us confidence that every event is authentic. Our compliance team loves the detailed audit trail.",
+    name: "David Kim",
+    role: "Security Lead, TrustVault",
+    avatar: "https://i.pravatar.cc/150?img=60",
     stars: 5,
   },
 ];
@@ -74,6 +76,7 @@ const TestimonialsSection = () => {
           alt="Mountains Background"
           fill
           className="object-cover"
+          priority={false}
         />
         <div className="absolute inset-0 bg-black/20" />
       </motion.div>
@@ -180,7 +183,7 @@ const TestimonialsSection = () => {
               </div>
               <p className="text-xs text-white/80">
                 Trusted by{" "}
-                <span className="font-bold text-white">300+ clients</span>
+                <span className="font-bold text-white">500+ companies</span>
               </p>
             </div>
           </div>
