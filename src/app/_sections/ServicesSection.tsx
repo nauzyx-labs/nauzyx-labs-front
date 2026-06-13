@@ -100,8 +100,7 @@ const ServicesSection = () => {
 
   useGSAP(
     () => {
-      if (!containerRef.current || !sectionRef.current || !panelRef.current)
-        return;
+      if (!containerRef.current || !sectionRef.current) return;
 
       // Only run convergence animation on desktop (md+)
       const mql = window.matchMedia("(min-width: 768px)");
@@ -109,21 +108,14 @@ const ServicesSection = () => {
 
       const container = containerRef.current;
       const cards = cardsRef.current.filter(Boolean);
-      const convergenceStrength = 1;
 
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top top",
-        end: "60% top",
-        pin: panelRef.current,
-        pinSpacing: false,
-      });
-
+      // No pin — section scrolls naturally
+      // Animation plays as the section scrolls through the viewport
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top top",
-          end: "60% top",
+          start: "top 0%",
+          end: "bottom 20%",
           scrub: 1.5,
           invalidateOnRefresh: true,
         },
@@ -140,20 +132,18 @@ const ServicesSection = () => {
               const containerRect = container.getBoundingClientRect();
               const cardRect = card.getBoundingClientRect();
               return (
-                (containerRect.left +
-                  containerRect.width / 2 -
-                  (cardRect.left + cardRect.width / 2)) *
-                convergenceStrength
+                containerRect.left +
+                containerRect.width / 2 -
+                (cardRect.left + cardRect.width / 2)
               );
             },
             y: () => {
               const containerRect = container.getBoundingClientRect();
               const cardRect = card.getBoundingClientRect();
               return (
-                (containerRect.top +
-                  containerRect.height / 2 -
-                  (cardRect.top + cardRect.height / 2)) *
-                convergenceStrength
+                containerRect.top +
+                containerRect.height / 2 -
+                (cardRect.top + cardRect.height / 2)
               );
             },
             scale: 1.06,
@@ -183,11 +173,11 @@ const ServicesSection = () => {
             scale: 0.7,
             ease: "power2.in",
           },
-          0.75,
+          0.5,
         );
       }
 
-      // Cards pulse at the end
+      // Cards pulse near the end
       cards.forEach((card) => {
         tl.to(
           card,
@@ -195,7 +185,7 @@ const ServicesSection = () => {
             scale: 1.1,
             ease: "power1.inOut",
           },
-          0.85,
+          0.6,
         );
       });
     },
@@ -206,7 +196,7 @@ const ServicesSection = () => {
     <section
       ref={sectionRef}
       className="services-heading relative w-full"
-      style={{ minHeight: "200vh" }}
+      style={{ minHeight: "100vh" }}
     >
       <div
         ref={panelRef}

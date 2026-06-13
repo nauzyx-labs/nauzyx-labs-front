@@ -56,8 +56,10 @@ function AvatarGroup() {
 
 const HeroSection = ({
   heroRef,
+  activeNav,
 }: {
   heroRef: React.RefObject<HTMLDivElement | null>;
+  activeNav?: string;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLElement>(null);
@@ -173,9 +175,16 @@ const HeroSection = ({
                       document.querySelector(item.href)?.scrollIntoView({ behavior: "smooth" });
                     }
                   }}
-                  className="text-sm font-medium transition-colors text-white hover:text-white/80"
+                  className={`text-sm font-medium transition-colors relative pb-1 ${
+                    activeNav === item.href.replace("#", "")
+                      ? "text-white"
+                      : "text-white/70 hover:text-white"
+                  }`}
                 >
                   {item.label}
+                  {activeNav === item.href.replace("#", "") && (
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white" />
+                  )}
                 </button>
               ))}
             </div>

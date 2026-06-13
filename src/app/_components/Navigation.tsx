@@ -23,7 +23,7 @@ function scrollToSection(href: string) {
   }
 }
 
-const Navigation = ({ showPill }: { showPill?: boolean }) => {
+const Navigation = ({ showPill, activeId }: { showPill?: boolean; activeId?: string }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -48,9 +48,16 @@ const Navigation = ({ showPill }: { showPill?: boolean }) => {
             <button
               key={item.label}
               onClick={() => scrollToSection(item.href)}
-              className="text-sm font-medium text-gray-700 hover:text-black transition-colors"
+              className={`text-sm font-medium transition-colors relative pb-1 ${
+              activeId === item.href.replace("#", "")
+                ? "text-black"
+                : "text-gray-700 hover:text-black"
+            }`}
             >
               {item.label}
+              {activeId === item.href.replace("#", "") && (
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-black" />
+              )}
             </button>
           ))}
         </div>
@@ -110,7 +117,11 @@ const Navigation = ({ showPill }: { showPill?: boolean }) => {
                   scrollToSection(item.href);
                   setMobileOpen(false);
                 }}
-                className="block w-full text-left px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-black hover:bg-gray-50 rounded-lg transition-colors"
+                className={`block w-full text-left px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${
+                  activeId === item.href.replace("#", "")
+                    ? "text-black bg-gray-50"
+                    : "text-gray-700 hover:text-black hover:bg-gray-50"
+                }`}
               >
                 {item.label}
               </button>

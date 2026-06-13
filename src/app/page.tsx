@@ -18,12 +18,21 @@ import TestimonialsSection from "./_sections/TestimonialsSection";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const TRACKED_SECTIONS = ["home", "services", "clients", "about", "projects", "contact"];
+
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
   const [navDark, setNavDark] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
   const mainRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
+  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
 
+  const setSectionRef = (id: string) => (el: HTMLElement | null) => {
+    sectionRefs.current[id] = el;
+  };
+
+  // Track hero visibility for nav pill show/hide
   useEffect(() => {
     const hero = heroRef.current;
     if (!hero) return;
@@ -35,10 +44,33 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
+  // Track which section is currently in view for nav highlighting
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+
+    TRACKED_SECTIONS.forEach((id) => {
+      const el = sectionRefs.current[id];
+      if (!el) return;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveSection(id);
+          }
+        },
+        { threshold: 0.3, rootMargin: "-10% 0px -40% 0px" },
+      );
+      observer.observe(el);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach((obs) => obs.disconnect());
+  }, [loaded]);
+
+  // Lenis smooth scroll
   useEffect(() => {
     const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
 
-    // Sync Lenis with GSAP ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update);
 
     const raf = (t: number) => {
@@ -49,6 +81,7 @@ export default function Home() {
     return () => lenis.destroy();
   }, []);
 
+  // Entrance animations after preloader
   useEffect(() => {
     if (!loaded) return;
     const timeout = setTimeout(() => {
@@ -96,27 +129,32 @@ export default function Home() {
         ref={mainRef}
         className="bg-white text-gray-900 selection:bg-blue-500 selection:text-white font-sans overflow-x-clip"
       >
-        <div id="home" className="absolute top-0" />
-        <Navigation showPill={navDark} />
+        <div
+          id="home"
+          ref={setSectionRef("home")}
+          className="absolute top-0"
+        />
+        <Navigation showPill={navDark} activeId={activeSection} />
         <HeroSection
           heroRef={heroRef as React.RefObject<HTMLDivElement | null>}
+          activeNav={activeSection}
         />
         <div className="relative z-20 -mt-[100vh]">
           <div className="bg-white rounded-t-[3rem] relative flex flex-col pt-8">
-            <div id="services">
+            <div id="services" ref={setSectionRef("services")}>
               <ServicesSection />
             </div>
-            <div id="clients">
+            <div id="clients" ref={setSectionRef("clients")}>
               <ClientsSection />
             </div>
-            <div id="about">
+            <div id="about" ref={setSectionRef("about")}>
               <AboutSection />
             </div>
-            <div id="projects">
+            <div id="projects" ref={setSectionRef("projects")}>
               <ProjectsSection />
             </div>
             <TestimonialsSection />
-            <div id="contact">
+            <div id="contact" ref={setSectionRef("contact")}>
               <CTASection />
             </div>
             <Footer />
