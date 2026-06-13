@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 import {
   Sparkles,
@@ -19,81 +21,68 @@ const CLIENTS = [
   { name: "Interlock", icon: Shuffle },
   { name: "Luminous", icon: LayoutGrid },
   { name: "Segment", icon: Box },
+  { name: "Nietzsche", icon: Sparkles },
+  { name: "Lightbox", icon: Box },
 ];
 
 const ClientsSection = () => {
   return (
-    <section id="clients" className="py-24 sm:py-32 bg-white relative z-10 overflow-hidden rounded-[2.5rem] mt-[-2.5rem]">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="flex flex-col items-center justify-center text-center mb-16 px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="border border-blue-200 text-blue-500 rounded-full px-4 py-1.5 text-xs sm:text-sm mb-6 bg-white shrink-0 mx-auto inline-block">
-              Clients
+    <section
+      id="clients"
+      className="py-24 sm:py-32 bg-white relative z-10 overflow-hidden"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        {/* Z-pattern: title right, cards left */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
+          {/* Left: cards grid */}
+          <div className="lg:col-span-8 order-2 lg:order-1">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {CLIENTS.map((client, i) => (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.05 }}
+                  key={client.name}
+                  className="flex items-center justify-center gap-3 p-5 sm:p-6 bg-[#f3f6fb] rounded-[26px] hover:scale-[1.02] transition-transform"
+                >
+                  <div
+                    className="w-9 h-9 rounded-[6px] flex items-center justify-center shrink-0"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, rgb(33,127,241) 0%, rgb(31,43,56) 100%)",
+                      boxShadow: "rgba(33,127,241,0.2) 0px 2px 8px 0px",
+                    }}
+                  >
+                    <client.icon className="w-4.5 h-4.5 text-white" />
+                  </div>
+                  <span className="text-[#1f2b38] font-semibold text-sm sm:text-base tracking-tight">
+                    {client.name}
+                  </span>
+                </motion.div>
+              ))}
             </div>
-            <h2 className="text-3xl sm:text-5xl md:text-6xl font-medium text-blue-500 tracking-tight leading-[1.1] max-w-2xl">
-              Trusted by forward
-              <br />
-              thinking teams
-            </h2>
-          </motion.div>
-        </div>
+          </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
-          {CLIENTS.map((client, i) => (
+          {/* Right: title area */}
+          <div className="lg:col-span-4 lg:sticky lg:top-32 order-1 lg:order-2">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.05 }}
-              key={client.name}
-              className="flex items-center justify-center gap-2 p-6 sm:p-8 bg-gray-50/80 rounded-2xl hover:bg-gray-100 transition-colors"
+              transition={{ duration: 0.6 }}
+              className="lg:text-right"
             >
-              <client.icon
-                className="text-gray-900 w-6 h-6 sm:w-8 sm:h-8"
-                strokeWidth={2.5}
-              />
-              <span className="text-gray-900 font-semibold text-lg sm:text-xl tracking-tight">
-                {client.name}
-              </span>
+              <div className="inline-flex mb-6 items-center px-6 py-2.5 rounded-full border border-[rgb(33,127,241)] text-[rgb(33,127,241)] text-sm font-semibold">
+                Clients
+              </div>
+              <h2 className="text-4xl xl:text-6xl font-medium text-[rgb(33,127,241)] tracking-tight leading-9 xl:leading-14">
+                Trusted by forward
+                <br />
+                thinking teams
+              </h2>
             </motion.div>
-          ))}
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 8 * 0.05 }}
-            className="flex items-center justify-center gap-2 p-6 sm:p-8 bg-gray-50/80 rounded-2xl hover:bg-gray-100 transition-colors"
-          >
-            <Sparkles
-              className="text-gray-900 w-6 h-6 sm:w-8 sm:h-8"
-              strokeWidth={2.5}
-            />
-            <span className="text-gray-900 font-semibold text-lg sm:text-xl tracking-tight">
-              Nietzsche
-            </span>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 9 * 0.05 }}
-            className="flex items-center justify-center gap-2 p-6 sm:p-8 bg-gray-50/80 rounded-2xl hover:bg-gray-100 transition-colors"
-          >
-            <Box
-              className="text-gray-900 w-6 h-6 sm:w-8 sm:h-8"
-              strokeWidth={2.5}
-            />
-            <span className="text-gray-900 font-semibold text-lg sm:text-xl tracking-tight">
-              Lightbox
-            </span>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

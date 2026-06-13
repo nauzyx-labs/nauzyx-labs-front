@@ -2,14 +2,9 @@
 
 import Grainient from "@/components/Grainient";
 import Logo from "@/components/Logo";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { MouseIcon } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const AVATAR_URLS = [
   "https://i.pravatar.cc/40?img=1",
@@ -62,51 +57,13 @@ const HeroSection = ({
   activeNav?: string;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLElement>(null);
-  const grainientRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
 
-  useGSAP(
-    () => {
-      if (!panelRef.current || !containerRef.current) return;
-
-      ScrollTrigger.create({
-        trigger: containerRef.current,
-        start: "top top",
-        end: "bottom top",
-        pin: panelRef.current,
-        pinSpacing: false,
-      });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 1.5,
-        },
-      });
-
-      tl.to(
-        grainientRef.current,
-        {
-          y: "-130vh",
-          ease: "none",
-        },
-        0,
-      );
-
-      tl.to(
-        contentRef.current,
-        {
-          y: "-110vh",
-          ease: "none",
-        },
-        0,
-      );
-    },
-    { scope: containerRef },
-  );
+  const grainientY = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
 
   return (
     <div ref={containerRef} className="relative w-full h-[200vh]">
@@ -115,12 +72,9 @@ const HeroSection = ({
         ref={heroRef}
       />
 
-      <section
-        ref={panelRef}
-        className="relative w-full h-screen overflow-hidden"
-      >
-        <div
-          ref={grainientRef}
+      <section className="sticky top-0 w-full h-screen overflow-hidden">
+        <motion.div
+          style={{ y: grainientY }}
           className="absolute top-0 left-0 right-0 h-[130vh] z-0"
         >
           <Grainient
@@ -144,10 +98,10 @@ const HeroSection = ({
             centerY={0.5}
             zoom={0.25}
           />
-        </div>
+        </motion.div>
 
-        <div
-          ref={contentRef}
+        <motion.div
+          style={{ y: contentY }}
           className="relative z-10 w-full h-full flex flex-col justify-between pb-8 sm:pb-12 md:pb-16 px-4 sm:px-6 md:px-10"
         >
           {/* Nav */}
@@ -243,12 +197,7 @@ const HeroSection = ({
               </div>
             </div>
           </div>
-        </div>
-
-        <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/70 text-xs z-20">
-          <MouseIcon size={16} className="mb-2 animate-bounce" />
-          <span className="hidden sm:block">Scroll down</span>
-        </div>
+        </motion.div>
       </section>
     </div>
   );

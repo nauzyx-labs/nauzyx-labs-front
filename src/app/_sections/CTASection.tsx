@@ -1,35 +1,47 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import Grainient from "@/components/Grainient";
 
 const CTASection = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
+
   return (
-    <section className="relative py-24 sm:py-32 overflow-hidden">
-      <div className="absolute inset-0 z-0">
+    <section
+      ref={containerRef}
+      className="relative py-24 sm:py-32 overflow-hidden my-4 mx-4 rounded-[2.5rem]"
+    >
+      <motion.div style={{ y }} className="absolute inset-[-20%] z-0">
         <Grainient
-          color1="#1b3864"
-          color2="#1c4786"
-          color3="#3e99ab"
-          timeSpeed={0.3}
-          colorBalance={0.5}
-          warpStrength={1.5}
-          warpFrequency={6}
-          warpSpeed={10}
-          warpAmplitude={15}
-          blendAngle={30}
-          blendSoftness={0.2}
-          rotationAmount={400}
-          grainAmount={0.03}
-          contrast={1.3}
-          gamma={0.95}
-          saturation={0.7}
-          centerX={0}
-          centerY={0}
-          zoom={0.4}
+          color1="#0f2942"
+          color2="#1a4a7a"
+          color3="#2dd4bf"
+          timeSpeed={0.4}
+          colorBalance={0.6}
+          warpStrength={2.0}
+          warpFrequency={7}
+          warpSpeed={12}
+          warpAmplitude={18}
+          blendAngle={40}
+          blendSoftness={0.15}
+          rotationAmount={500}
+          grainAmount={0.04}
+          contrast={1.4}
+          gamma={0.92}
+          saturation={0.75}
+          centerX={0.2}
+          centerY={0.3}
+          zoom={0.3}
         />
-        <div className="absolute inset-0 bg-black/30" />
-      </div>
+        <div className="absolute inset-0 bg-black/35" />
+      </motion.div>
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
         <motion.div

@@ -47,6 +47,14 @@ const SERVICES = [
   },
 ];
 
+const CARD_POSITIONS = [
+  { top: "8%", left: "2%" },
+  { top: "42%", left: "0%" },
+  { top: "6%", right: "2%" },
+  { top: "50%", right: "2%" },
+  { bottom: "4%", left: "35%" },
+];
+
 function ServiceCard({
   title,
   icon: Icon,
@@ -92,25 +100,75 @@ const ServicesSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
   const titleRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const pathsRef = useRef<SVGPathElement[]>([]);
 
   const setCardRef = (el: HTMLDivElement | null, index: number) => {
     if (!el) return;
     cardsRef.current[index] = el;
   };
 
+  const setPathRef = (el: SVGPathElement | null, index: number) => {
+    if (!el) return;
+    pathsRef.current[index] = el;
+  };
+
   useGSAP(
     () => {
-      if (!containerRef.current || !sectionRef.current) return;
+      if (!containerRef.current || !sectionRef.current || !svgRef.current) return;
 
-      // Only run convergence animation on desktop (md+)
       const mql = window.matchMedia("(min-width: 768px)");
       if (!mql.matches) return;
 
       const container = containerRef.current;
       const cards = cardsRef.current.filter(Boolean);
+      const paths = pathsRef.current.filter(Boolean);
 
-      // No pin — section scrolls naturally
-      // Animation plays as the section scrolls through the viewport
+      const updatePaths = () => {
+        if (!svgRef.current) return;
+        const svgEl = svgRef.current;
+        const svgRect = svgEl.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+
+        // Center of container relative to SVG
+        const cx = containerRect.left + containerRect.width / 2 - svgRect.left;
+        const cy = containerRect.top + containerRect.height / 2 - svgRect.top;
+
+        const gradients = svgEl.querySelectorAll("linearGradient");
+
+        cards.forEach((card, i) => {
+          if (!paths[i]) return;
+          const cardRect = card.getBoundingClientRect();
+          const cardCx = cardRect.left + cardRect.width / 2 - svgRect.left;
+          const cardCy = cardRect.top + cardRect.height / 2 - svgRect.top;
+
+          // Skip if positions are off-screen (fast scroll artifact)
+          if (Math.abs(cardCx) > 3000 || Math.abs(cardCy) > 3000) return;
+
+          const midX = (cx + cardCx) / 2;
+          const midY = (cy + cardCy) / 2;
+          const dx = cardCx - cx;
+          const dy = cardCy - cy;
+          const perpX = -dy * 0.15;
+          const perpY = dx * 0.15;
+
+          paths[i].setAttribute(
+            "d",
+            `M ${cx} ${cy} Q ${midX + perpX} ${midY + perpY} ${cardCx} ${cardCy}`,
+          );
+
+          if (gradients[i]) {
+            gradients[i].setAttribute("x1", String(cx));
+            gradients[i].setAttribute("y1", String(cy));
+            gradients[i].setAttribute("x2", String(cardCx));
+            gradients[i].setAttribute("y2", String(cardCy));
+          }
+        });
+      };
+
+      // Continuously update paths on every frame for smooth fast-scroll
+      const tickerId = gsap.ticker.add(() => updatePaths());
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -154,40 +212,36 @@ const ServicesSection = () => {
         );
       });
 
+      // Paths fade as cards converge
+      tl.to(
+        svgRef.current,
+        { opacity: 0, ease: "power1.in" },
+        0.3,
+      );
+
       // Phase 2: Title fades
       if (titleRef.current) {
         tl.to(
           titleRef.current,
-          {
-            scale: 0.78,
-            opacity: 0.85,
-            ease: "power2.out",
-          },
+          { scale: 0.78, opacity: 0.85, ease: "power2.out" },
           0,
         );
-
         tl.to(
           titleRef.current,
-          {
-            opacity: 0,
-            scale: 0.7,
-            ease: "power2.in",
-          },
+          { opacity: 0, scale: 0.7, ease: "power2.in" },
           0.5,
         );
       }
 
       // Cards pulse near the end
       cards.forEach((card) => {
-        tl.to(
-          card,
-          {
-            scale: 1.1,
-            ease: "power1.inOut",
-          },
-          0.6,
-        );
+        tl.to(card, { scale: 1.1, ease: "power1.inOut" }, 0.6);
       });
+
+      // Initial path draw
+      updatePaths();
+
+      return () => gsap.ticker.remove(tickerId);
     },
     { scope: sectionRef },
   );
@@ -218,8 +272,46 @@ const ServicesSection = () => {
           </h2>
         </div>
 
-        {/* Desktop: absolute positioned cards for convergence animation */}
+        {/* Desktop: SVG dynamic lines + cards */}
         <div className="hidden md:flex absolute inset-0 items-center justify-center">
+          <svg
+            ref={svgRef}
+            className="absolute inset-0 w-full h-full z-10 pointer-events-none"
+          >
+            <defs>
+              {SERVICES.map((svc, i) => (
+                <linearGradient
+                  key={`grad-${svc.id}`}
+                  id={`line-gradient-${i}`}
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0%" stopColor="rgb(33,127,241)" stopOpacity="0.05" />
+                  <stop offset="50%" stopColor="rgb(33,127,241)" stopOpacity="0.3" />
+                  <stop offset="100%" stopColor="rgb(33,127,241)" stopOpacity="0.8" />
+                </linearGradient>
+              ))}
+            </defs>
+            {SERVICES.map((svc, i) => (
+              <path
+                key={svc.id}
+                ref={(el) => setPathRef(el, i)}
+                fill="none"
+                stroke={`url(#line-gradient-${i})`}
+                strokeWidth="2"
+                strokeDasharray="6 4"
+                strokeLinecap="round"
+              >
+                <animate
+                  attributeName="stroke-dashoffset"
+                  from="0"
+                  to="-20"
+                  dur="1.5s"
+                  repeatCount="indefinite"
+                />
+              </path>
+            ))}
+          </svg>
+
           <div ref={containerRef} className="relative w-full h-full max-w-7xl">
             {SERVICES.map((svc, i) => (
               <div
@@ -259,13 +351,6 @@ const ServicesSection = () => {
               />
             </div>
           ))}
-        </div>
-
-        {/* Scroll progress indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-[rgb(33,127,241)]/50 text-xs z-30 pointer-events-none">
-          <span className="text-[11px] font-medium tracking-widest uppercase">
-            Scroll to explore
-          </span>
         </div>
       </div>
     </section>

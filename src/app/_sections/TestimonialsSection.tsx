@@ -44,7 +44,6 @@ const TESTIMONIALS = [
     role: "Platform Architect, NexGen",
     avatar: "https://i.pravatar.cc/150?img=44",
     stars: 5,
-    highlight: true,
   },
   {
     quote:
@@ -68,7 +67,7 @@ const TestimonialsSection = () => {
   return (
     <section
       ref={containerRef}
-      className="relative py-24 sm:py-32 overflow-hidden min-h-[800px] flex items-center rounded-[2.5rem] my-4 mx-4"
+      className="relative py-24 sm:py-32 overflow-hidden min-h-[800px] flex items-center my-4 mx-4 rounded-[2.5rem]"
     >
       <motion.div style={{ y }} className="absolute inset-[-20%] z-0">
         <Image
@@ -78,18 +77,17 @@ const TestimonialsSection = () => {
           className="object-cover"
           priority={false}
         />
-        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-black/30" />
       </motion.div>
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex justify-center mb-16">
-          <Image
-            src="/logo_white.svg"
-            alt="Logo"
-            width={48}
-            height={48}
-            className="opacity-80"
-          />
+        <div className="text-center mb-16">
+          <div className="inline-flex mb-6 items-center px-6 py-2.5 rounded-full border border-white/30 text-white/80 text-sm font-semibold">
+            Testimonials
+          </div>
+          <h2 className="text-4xl xl:text-7xl font-medium text-white tracking-tight leading-9 xl:leading-16">
+            What our clients say
+          </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -100,33 +98,22 @@ const TestimonialsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
-              className={`p-8 rounded-3xl flex flex-col justify-between min-h-[300px] shadow-lg border border-white/10 ${
-                t.highlight
-                  ? "bg-white text-gray-900"
-                  : "bg-black/30 backdrop-blur-md text-white"
-              }`}
+              className="bg-[#f3f6fb] rounded-[26px] p-8 flex flex-col justify-between min-h-[300px] hover:scale-[1.02] transition-transform"
             >
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex gap-1">
                     {[...Array(t.stars)].map((_, s) => (
-                      <span
-                        key={s}
-                        className={t.highlight ? "text-blue-500" : "text-white"}
-                      >
+                      <span key={s} className="text-[rgb(33,127,241)]">
                         ★
                       </span>
                     ))}
                   </div>
-                  <span
-                    className={`text-2xl font-serif leading-none ${t.highlight ? "text-blue-500" : "text-white/40"}`}
-                  >
+                  <span className="text-3xl font-serif leading-none text-[rgb(33,127,241)]/40">
                     &quot;
                   </span>
                 </div>
-                <p
-                  className={`text-sm sm:text-base leading-relaxed mb-8 ${t.highlight ? "text-gray-600" : "text-white/80"}`}
-                >
+                <p className="text-sm sm:text-base leading-relaxed mb-8 text-gray-600">
                   {t.quote}
                 </p>
               </div>
@@ -140,23 +127,17 @@ const TestimonialsSection = () => {
                   className="rounded-full object-cover"
                 />
                 <div>
-                  <h4
-                    className={`font-semibold text-sm ${t.highlight ? "text-blue-500" : "text-white"}`}
-                  >
+                  <h4 className="font-semibold text-sm text-[rgb(33,127,241)]">
                     {t.name}
                   </h4>
-                  <p
-                    className={`text-xs ${t.highlight ? "text-gray-500" : "text-white/60"}`}
-                  >
-                    {t.role}
-                  </p>
+                  <p className="text-xs text-gray-500">{t.role}</p>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
 
-        <div className="mt-16 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="mt-16 flex flex-col md:flex-row justify-center items-center gap-6">
           <div className="flex items-center gap-3">
             <div className="flex -space-x-2">
               {[1, 5, 9].map((img) => (
@@ -166,7 +147,7 @@ const TestimonialsSection = () => {
                   alt="client avatar"
                   width={42}
                   height={42}
-                  className="rounded-full object-cover border-2 border-transparent"
+                  className="rounded-full object-cover border-2 border-white"
                 />
               ))}
             </div>
@@ -186,10 +167,6 @@ const TestimonialsSection = () => {
                 <span className="font-bold text-white">500+ companies</span>
               </p>
             </div>
-          </div>
-
-          <div className="text-white/80 text-sm font-semibold tracking-widest uppercase">
-            Testimonials
           </div>
         </div>
       </div>
